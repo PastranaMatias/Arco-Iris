@@ -1,4 +1,4 @@
-Blacklog 
+Backlog 
 
 Utilizando el formato Job story para describir las historias de usuario, ya que solo tenemos un solo usuario usando la aplicación.                        
 
