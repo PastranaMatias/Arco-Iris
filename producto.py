@@ -26,3 +26,6 @@ class Producto:
             return False
 
         return True
+    #Agrego la funcion para calcular el precio, precio por la cantidad
+    def calcular_precio(self):
+        return self.precio * self.cantidad
