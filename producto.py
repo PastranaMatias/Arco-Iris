@@ -10,3 +10,19 @@ class Producto:
 
     def mostrar_confirmacion(self):
         print(f"✅ Producto: {self.nombre} ({self.marca}) - Precio: ${self.precio}, Stock: {self.stock}")
+
+    #Funcion para validar que le producto no tengo valores erroneos
+    def validar_datos(self): 
+        if not self.nombre or self.nombre.strip() == "":
+            return False
+
+        if not self.marca or self.marca.strip() == "":
+            return False
+
+        if self.precio <= 0:
+            return False
+
+        if self.stock < 0:
+            return False
+
+        return True
