@@ -11,6 +11,7 @@ class Producto:
         self.nombre = nombre
         self.marca = marca
         self.precio = precio
+        self.color = color
         self.stock = stock_inicial
 
     def actualizar_stock(self, cantidad):
