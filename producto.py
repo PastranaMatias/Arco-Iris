@@ -1,5 +1,13 @@
 class Producto:
-    def __init__(self, nombre, marca, precio, color, stock_inicial=0,):
+    def __init__(self, nombre, marca, precio, stock_inicial=0):
+        # Validaciones
+        if not nombre or not marca:
+            raise ValueError("❌ El nombre y la marca no pueden estar vacíos.")
+        if precio <= 0:
+            raise ValueError("❌ El precio debe ser mayor a 0.")
+        if stock_inicial < 0:
+            raise ValueError("❌ El stock inicial no puede ser negativo.")
+
         self.nombre = nombre
         self.marca = marca
         self.precio = precio
@@ -7,28 +15,14 @@ class Producto:
         self.stock = stock_inicial
 
     def actualizar_stock(self, cantidad):
+        if cantidad < 0 and abs(cantidad) > self.stock:
+            raise ValueError("❌ No se puede reducir más stock del disponible.")
         self.stock += cantidad
 
     def mostrar_confirmacion(self):
-        print(f"✅ Producto: {self.nombre} ({self.marca}) - Precio: ${self.precio}, Stock: {self.stock},Color:{self.color}")
+        print(f"✅ Producto: {self.nombre} ({self.marca}) - Precio: ${self.precio}, Stock: {self.stock}")
 
-    #Funcion para validar que le producto no tengo valores erroneos
-    def validar_datos(self): 
-        if not self.nombre or self.nombre.strip() == "":
-            return False
+    
 
-        if not self.marca or self.marca.strip() == "":
-            return False
-        
-        if not self.color or self.color.strip() == "":
-                    return False
-        if self.precio <= 0:
-            return False
 
-        if self.stock < 0:
-            return False
 
-        return True
-    #Agrego la funcion para calcular el precio, precio por la cantidad
-    def calcular_precio(self):
-        return self.precio * self.cantidad
