@@ -1,6 +1,10 @@
 from producto import Producto
 from gestorproductos import GestorProductos
 from interfaces.imostrable import IMostrable
+from producto import Producto
+from gestorproductos import GestorProductos
+from descuento import Descuento
+
 
 def pedir_precio():
     while True:

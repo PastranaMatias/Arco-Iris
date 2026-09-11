@@ -1,4 +1,4 @@
-zclass Producto:
+class producto:
     def __init__(self, nombre, marca, precio, stock_inicial=0, color=None):
         # Validaciones
         if not nombre or not marca:
