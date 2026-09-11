@@ -1,5 +1,5 @@
 class Producto:
-    def __init__(self, nombre, marca, precio, color, stock_inicial=0,):
+    def __init__(self, nombre, marca, precio, stock_inicial=0,color=None):
         self.nombre = nombre
         self.marca = marca
         self.precio = precio
@@ -10,7 +10,7 @@ class Producto:
         self.stock += cantidad
 
     def mostrar_confirmacion(self):
-        print(f"✅ Producto: {self.nombre} ({self.marca}) - Precio: ${self.precio}, Stock: {self.stock},Color:{self.color}")
+        print(f"Producto: {self.nombre} ({self.marca}) - Precio: ${self.precio}, Stock: {self.stock},Color:{self.color}")
 
     #Funcion para validar que le producto no tengo valores erroneos
     def validar_datos(self): 

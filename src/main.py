@@ -1,4 +1,6 @@
 from producto import Producto
+from gestorproductos import GestorProductos
+from interfaces.imostrable import IMostrable
 
 def menu():
     productos = []
@@ -16,8 +18,9 @@ def menu():
             marca = input("Ingrese marca: ")
             precio = float(input("Ingrese precio: "))
             stock = int(input("Ingrese stock inicial: "))
+            color = input("Ingrese color(si no aplica, presione Enter): ") or None
 
-            nuevo = Producto(nombre, marca, precio, stock)
+            nuevo = Producto(nombre, marca, precio, stock, color)
             productos.append(nuevo)
             nuevo.mostrar_confirmacion()
 

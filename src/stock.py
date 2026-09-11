@@ -4,5 +4,5 @@ class Stock:
         self.alerta=alerta
 
     def verifica(self) -> bool:
-        self.alerta = self.cantidadDisponible <= 0
+        self.alerta = self.cantidadDisponible <= 10
         return self.alerta
