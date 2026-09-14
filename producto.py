@@ -1,5 +1,6 @@
 class Producto:
-    def __init__(self, nombre, marca, precio, color, stock_inicial=0,):
+    def __init__(self, id,nombre, marca, precio, color, stock_inicial=0,):
+        self.id=id
         self.nombre = nombre
         self.marca = marca
         self.precio = precio
@@ -30,5 +31,5 @@ class Producto:
 
         return True
     #Agrego la funcion para calcular el precio, precio por la cantidad
-    def calcular_precio(self):
-        return self.precio * self.cantidad
+    def calcular_precio(self)->int:
+        return self.precio*self.stock
