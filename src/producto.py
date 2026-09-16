@@ -1,5 +1,5 @@
 class producto:
-    def __init__(self, nombre, marca, precio, stock_inicial=0, color=None):
+    def __init__(self, nombre, marca, precio, stock_inicial, color=None):
         # Validaciones
         if not nombre or not marca:
             raise ValueError("El nombre y la marca no pueden estar vacíos.")

@@ -22,4 +22,7 @@ class GestorProductos:
         for produc in self.ListaProductos:
             print(f"{produc.nombre}: ${produc.calcular_precio()}")
 
+    def mostrarCantidad(self):
+        for produc in self.ListaProductos:
+            print(f"{produc.nombre}: ${produc.stock}")
         
