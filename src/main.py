@@ -1,7 +1,9 @@
 from producto import Producto
 from gestorproductos import GestorProductos
+from interfaces.imostrable import IMostrable
+from producto import Producto
+from gestorproductos import GestorProductos
 from descuento import Descuento
-from pedido import Pedido
 from ticket import Ticket
 import os #para limpiar pantalla
 
@@ -9,26 +11,13 @@ import os #para limpiar pantalla
 def limpiarPantalla():
     os.system("cls")
 
-gestP=GestorProductos() #creo al gestor de productos
+gestP=GestorProductos() #creo al gestor de productos /para verificar
+produc=Producto(1,"pintura","Grre",120,"rojo",5) #productos de prueba
+prod=Producto(2,"pintura","Blue",120,"azul",7)
+gestP.agregarProducto(produc)
+gestP.agregarProducto(prod)
+gestP.verificarStock(prod)
 
-def pedirProd():
-    product=[]
-
-    print("Ingre info del producto a pedir")
-    id=input("ing id del producto")
-    cant=input("ing cantidad")
-    
-    #product.append(pedido)
-    print("Desea agregar otro producto" \
-    "precione:")
-
-    print("1- Si")
-    print ("0- No, ir a forma de pago")
-    
-    ver=int(input())
-    if ver==0:
-        print ("a")
-        #revisar !!!!
 def genTi(): 
     item =[]
 
@@ -80,18 +69,41 @@ def genTi():
     print("Enter para volver al menu")
     input()
 
-    
-produc=Producto(1,"pintura","Grre",120,"rojo",5)
-prod=Producto(2,"pintura","Blue",120,"azul",7)
-gestP.agregarProducto(produc)
-gestP.agregarProducto(prod)
-gestP.verificarStock(prod)
-def menu():
 
+def pedir_precio():
+    while True:
+        entrada = input("Ingrese precio: ")
+        if not entrada.strip():
+            print("El precio no puede estar vacío.")
+            continue
+        try:
+            precio = float(entrada)
+            if precio <= 0:
+                print("El precio debe ser mayor a 0.")
+                continue
+            return precio
+        except ValueError:
+            print("Debe ingresar un número válido.")
+
+def pedir_stock():
+    while True:
+        entrada = input("Ingrese stock inicial: ")
+        if not entrada.strip():
+            print("El stock no puede estar vacío.")
+            continue
+        try:
+            stock = int(entrada)
+            if stock < 0:
+                print("El stock no puede ser negativo.")
+                continue
+            return stock
+        except ValueError:
+            print("Debe ingresar un número entero válido.")
+
+def menu():
     productos = []
 
     while True:
-        limpiarPantalla()
         print("\n=== Sistema Arcoiris ===")
         print("1. Registrar producto")
         print("2. Mostrar productos")
@@ -99,28 +111,24 @@ def menu():
         print("4. Salir")
 
         opcion = input("Seleccione una opción: ")
+        
+        if opcion == "1":
+            nombre = input("Ingrese nombre: ").strip()
+            marca = input("Ingrese marca: ").strip()
+            precio = pedir_precio()
+            stock = pedir_stock()
 
-        if opcion=="3":
-            
-            #produc=Producto(1,"pintura","Grre",120,"rojo",5)
-            #prod=Producto(2,"pintura","Blue",120,"azul",7)
-            #gestP.agregarProducto(produc)
-            #gestP.agregarProducto(prod)
-            #gestP.verificarStock(prod)
-            genTi()
+            # Color opcional
+            color = input("Ingrese color (dejar vacío si no aplica): ").strip()
+            if not color:
+                color = None
 
-
-        elif opcion == "1":
-            precio = int(input("Ingrese Id: "))
-            nombre = input("Ingrese nombre: ")
-            marca = input("Ingrese marca: ")
-            precio = float(input("Ingrese precio: "))
-            stock = int(input("Ingrese stock inicial: "))
-
-            nuevo = Producto(id,nombre, marca, precio, stock)
-            #productos.append(nuevo)
-            #nuevo.mostrar_confirmacion()
-            gestP.agregarProducto(nuevo) #agrego al productos al gestorP
+            try:
+                nuevo = Producto(nombre, marca, precio, stock, color)
+                productos.append(nuevo)
+                nuevo.mostrar_confirmacion()
+            except ValueError as e:
+                print(e)
 
         elif opcion == "2":
             if productos:
@@ -130,6 +138,10 @@ def menu():
             else:
                 print("No hay productos registrados todavía.")
 
+        elif opcion=="3":
+            genTi()
+
+
         elif opcion == "4":
             print("Saliendo del sistema...")
             break
@@ -138,5 +150,3 @@ def menu():
 
 if __name__ == "__main__":
     menu()
-
-#yo desde aca
