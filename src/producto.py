@@ -1,5 +1,5 @@
-class producto:
-    def __init__(self, nombre, marca, precio, stock_inicial=0, color=None):
+class Producto:
+    def __init__(self, id, nombre, marca, precio, stock_inicial=0, color=None):
         # Validaciones
         if not nombre or not marca:
             raise ValueError("El nombre y la marca no pueden estar vacíos.")
@@ -10,6 +10,7 @@ class producto:
         if color is not None and not color.strip():
             raise ValueError("El color no puede estar vacío si se especifica.")
 
+        self.id=id # nuevo atributo
         self.nombre = nombre
         self.marca = marca
         self.precio = precio
@@ -26,7 +27,9 @@ class producto:
         info_color = f", Color: {self.color}" if self.color else ""
         print(f"Producto: {self.nombre} ({self.marca}) - Precio: ${self.precio}, Stock: {self.stock}{info_color}")
 
-    
+    #Agrego la funcion para calcular el precio, precio por la cantidad
+    def calcular_precio(self)->int:
+        return self.precio*self.stock
 
 
 
