@@ -1,8 +1,6 @@
 from producto import Producto
 from gestorproductos import GestorProductos
 from interfaces.imostrable import IMostrable
-from producto import Producto
-from gestorproductos import GestorProductos
 from descuento import Descuento
 from ticket import Ticket
 import os #para limpiar pantalla
@@ -12,8 +10,8 @@ def limpiarPantalla():
     os.system("cls")
 
 gestP=GestorProductos() #creo al gestor de productos /para verificar
-produc=Producto(1,"pintura","Grre",120,"rojo",5) #productos de prueba
-prod=Producto(2,"pintura","Blue",120,"azul",7)
+produc=Producto(1,"pintura","Grre",120,5,"rojo") #productos de prueba
+prod=Producto(2,"pintura","Blue",120,7,"Azul")
 gestP.agregarProducto(produc)
 gestP.agregarProducto(prod)
 gestP.verificarStock(prod)
@@ -102,8 +100,8 @@ def pedir_stock():
 
 def menu():
     productos = []
-
     while True:
+        limpiarPantalla() # limpio lo q estaba arriba de la terminal
         print("\n=== Sistema Arcoiris ===")
         print("1. Registrar producto")
         print("2. Mostrar productos")
@@ -113,6 +111,7 @@ def menu():
         opcion = input("Seleccione una opción: ")
         
         if opcion == "1":
+            id=int(input("ingrese ID"))
             nombre = input("Ingrese nombre: ").strip()
             marca = input("Ingrese marca: ").strip()
             precio = pedir_precio()
@@ -124,7 +123,7 @@ def menu():
                 color = None
 
             try:
-                nuevo = Producto(nombre, marca, precio, stock, color)
+                nuevo = Producto(id,nombre, marca, precio, stock, color)
                 productos.append(nuevo)
                 nuevo.mostrar_confirmacion()
             except ValueError as e:
