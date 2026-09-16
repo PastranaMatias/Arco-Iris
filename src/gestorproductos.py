@@ -20,5 +20,6 @@ class GestorProductos:
 
     def mostrarPreciosFinales(self):
         for produc in self.ListaProductos:
-            print (f"{Producto(produc).nombre}:${Producto(produc).calcular_precio()}")
+            print(f"{produc.nombre}: ${produc.calcular_precio()}")
+
         
