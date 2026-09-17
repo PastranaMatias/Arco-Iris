@@ -27,7 +27,7 @@ class producto:
         print(f"Producto: {self.nombre} ({self.marca}) - Precio: ${self.precio}, Stock: {self.stock}{info_color}")
 
     def calcular_precio(self):
-        return self.precio
+        return (self.precio + 1.3) #asi se calculo el 30% de recargo. 
 
 
 
