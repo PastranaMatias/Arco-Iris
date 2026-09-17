@@ -27,9 +27,9 @@ class Producto:
         info_color = f", Color: {self.color}" if self.color else ""
         print(f"Producto: {self.nombre} ({self.marca}) - Precio: ${self.precio}, Stock: {self.stock}{info_color}")
 
-    #Agrego la funcion para calcular el precio, precio por la cantidad
+    #Agrego la funcion para calcular el precio
     def calcular_precio(self)->int:
-        return self.precio*self.stock
+        return self.precio * 1.3  # Calcula el precio de venta agregando el 30% de ganancia sobre el costo.
 
 
 
