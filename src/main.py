@@ -1,97 +1,151 @@
 from producto import Producto
 from gestorproductos import GestorProductos
+from interfaces.imostrable import IMostrable
+from descuento import Descuento
+from ticket import Ticket
+import os #para limpiar pantalla
+
+
+def limpiarPantalla():
+    os.system("cls")
+
+gestP=GestorProductos() #creo al gestor de productos /para verificar
+produc=Producto(1,"pintura","Grre",120,5,"rojo") #productos de prueba
+prod=Producto(2,"pintura","Blue",120,7,"Azul")
+gestP.agregarProducto(produc)
+gestP.agregarProducto(prod)
+gestP.verificarStock(prod)
+
+def genTi(): 
+    item =[]
+
+    while True:  
+        print(" === Cobro ===")
+        id=int(input("ing id del producto: "))
+        cant=int(input("ing cantidad: "))
+
+        item.append((id,cant))
+
+        print("Desea agregar otro producto, precione:")
+        print("1- Si")
+        print("0- No, ir a forma de pago")
+        re=int(input())
+
+        if re==0:
+            break
+        elif re!=1 : print("Dato erroneo") #agregar un execion
+
+    ticke=gestP.generarTicket(item) #genero ticket
+    subtotal=ticke.calTotal()  #guarto el total sin descuento
+
+    print("Formas de Pago:")   
+    print("1- Efectivo")
+    print ("2- Tarjeta")
+    forma=int(input())
+
+    if forma==1:
+        desc=Descuento("Efectivo",10) 
+
+    elif forma==2:
+        desc=Descuento("Credito",15)
+    
+    else:desc=None
+
+    if desc:
+        totalFinal=desc.aplicar(subtotal)
+
+    else: totalFinal=subtotal
+
+    ticke.impriTiket()
+    print(f"Precio: ${subtotal}")
+    if desc.tipo=="efectivo":
+        print(f"Descuento:{desc.porcentaje}%")
+    elif desc.tipo=="credito":
+        print(f"Recargo:{desc.porcentaje}%")
+    print(f"Precio Final: ${totalFinal}")
+
+    print("Enter para volver al menu")
+    input()
+
 
 def pedir_precio():
     while True:
-        entrada = input("Ingrese precio de costo: ").strip()
-        if not entrada:
-            print("❌ El precio no puede estar vacío.")
+        entrada = input("Ingrese precio: ")
+        if not entrada.strip():
+            print("El precio no puede estar vacío.")
             continue
         try:
             precio = float(entrada)
             if precio <= 0:
-                print("❌ El precio debe ser mayor a 0.")
+                print("El precio debe ser mayor a 0.")
                 continue
             return precio
         except ValueError:
-            print("❌ Debe ingresar un número válido.")
+            print("Debe ingresar un número válido.")
 
 def pedir_stock():
     while True:
-        entrada = input("Ingrese stock inicial: ").strip()
-        if not entrada:
-            print("❌ El stock no puede estar vacío.")
+        entrada = input("Ingrese stock inicial: ")
+        if not entrada.strip():
+            print("El stock no puede estar vacío.")
             continue
         try:
             stock = int(entrada)
             if stock < 0:
-                print("❌ El stock no puede ser negativo.")
+                print("El stock no puede ser negativo.")
                 continue
             return stock
         except ValueError:
-            print("❌ Debe ingresar un número entero válido.")
+            print("Debe ingresar un número entero válido.")
 
 def menu():
-    gestor = GestorProductos()
-
+    productos = []
     while True:
+        limpiarPantalla() # limpio lo q estaba arriba de la terminal
         print("\n=== Sistema Arcoiris ===")
         print("1. Registrar producto")
-        print("2. Mostrar lista de precios y stock")
-        print("3. Sumar stock a producto existente")
-        print("4. Descontar stock por venta/rotura")
-        print("5. Eliminar producto")
-        print("6. Salir")
+        print("2. Mostrar productos")
+        print("3. Cobrar Productos")
+        print("4. Salir")
 
-        opcion = input("Seleccione una opción: ").strip()
-
+        opcion = input("Seleccione una opción: ")
+        
         if opcion == "1":
+            id=int(input("ingrese ID"))
             nombre = input("Ingrese nombre: ").strip()
             marca = input("Ingrese marca: ").strip()
-            color = input("Ingrese color (opcional): ").strip() or None
+            precio = pedir_precio()
+            stock = pedir_stock()
+
+            # Color opcional
+            color = input("Ingrese color (dejar vacío si no aplica): ").strip()
+            if not color:
+                color = None
 
             try:
-                precio_costo = pedir_precio()
-                stock = pedir_stock()
-                nuevo = Producto(nombre, marca, precio_costo, stock, color)
-                gestor.agregar_producto(nuevo)
+                nuevo = Producto(id,nombre, marca, precio, stock, color)
+                productos.append(nuevo)
+                nuevo.mostrar_confirmacion()
             except ValueError as e:
                 print(e)
 
         elif opcion == "2":
-            gestor.mostrar()
+            if productos:
+                print("\n=== Lista de productos ===")
+                for p in productos:
+                    p.mostrar_confirmacion()
+            else:
+                print("No hay productos registrados todavía.")
 
-        elif opcion == "3":
-            nombre = input("Ingrese nombre del producto: ").strip()
-            marca = input("Ingrese marca del producto: ").strip()
-            color = input("Ingrese color del producto (opcional): ").strip() or None
-            try:
-                cantidad = int(input("Ingrese cantidad a sumar: "))
-                gestor.modificar_stock(nombre, marca, color, cantidad)
-            except ValueError:
-                print("❌ Debe ingresar un número entero válido.")
+        elif opcion=="3":
+            genTi()
+
 
         elif opcion == "4":
-            nombre = input("Ingrese nombre del producto: ").strip()
-            marca = input("Ingrese marca del producto: ").strip()
-            color = input("Ingrese color del producto (opcional): ").strip() or None
-            try:
-                cantidad = int(input("Ingrese cantidad a descontar: "))
-                gestor.modificar_stock(nombre, marca, color, -cantidad)
-            except ValueError:
-                print("❌ Debe ingresar un número entero válido.")
-
-        elif opcion == "5":
-            nombre = input("Ingrese nombre del producto: ").strip()
-            marca = input("Ingrese marca del producto: ").strip()
-            color = input("Ingrese color del producto (opcional): ").strip() or None
-            gestor.eliminar_producto(nombre, marca, color)
-
-        elif opcion == "6":
             print("Saliendo del sistema...")
             break
         else:
-            print("❌ Opción inválida. Intente nuevamente.")
+            print("Opción inválida. Intente nuevamente.")
 
 if __name__ == "__main__":
     menu()

@@ -1,30 +1,34 @@
-from interfaces.imostrable import IMostrable
-
-class Producto(IMostrable):
-    def __init__(self, nombre, marca, precio_costo, stock_inicial=0, color=None):
+class Producto:
+    def __init__(self, id, nombre, marca, precio, stock_inicial=0, color=None):
+        # Validaciones
         if not nombre or not marca:
-            raise ValueError("❌ El nombre y la marca no pueden estar vacíos.")
-        if precio_costo <= 0:
-            raise ValueError("❌ El precio de costo debe ser mayor a 0.")
+            raise ValueError("El nombre y la marca no pueden estar vacíos.")
+        if precio <= 0:
+            raise ValueError("El precio debe ser mayor a 0.")
         if stock_inicial < 0:
-            raise ValueError("❌ El stock inicial no puede ser negativo.")
+            raise ValueError("El stock inicial no puede ser negativo.")
         if color is not None and not color.strip():
-            raise ValueError("❌ El color no puede estar vacío si se especifica.")
+            raise ValueError("El color no puede estar vacío si se especifica.")
 
+        self.id=id # nuevo atributo
         self.nombre = nombre
         self.marca = marca
-        self.precio_costo = precio_costo
-        self.stock = stock_inicial
+        self.precio = precio
         self.color = color
-
-    def calcular_precio_venta(self):
-        return round(self.precio_costo * 1.30, 2)
+        self.stock = stock_inicial
+        self.color = color  # nuevo atributo
 
     def actualizar_stock(self, cantidad):
         if cantidad < 0 and abs(cantidad) > self.stock:
-            raise ValueError("❌ No se puede reducir más stock del disponible.")
+            raise ValueError("No se puede reducir más stock del disponible.")
         self.stock += cantidad
 
-    def mostrar(self):
+    def mostrar_confirmacion(self):
         info_color = f", Color: {self.color}" if self.color else ""
-        print(f"{self.nombre} ({self.marca}{info_color}) - Precio venta: ${self.calcular_precio_venta()} - Stock: {self.stock}")
+        print(f"Producto: {self.nombre} ({self.marca}) - Precio: ${self.precio}, Stock: {self.stock}{info_color}")
+
+    #Agrego la funcion para calcular el precio
+    def calcular_precio(self)->int:
+        return self.precio * 1.3  # Calcula el precio de venta agregando el 30% de ganancia sobre el costo.
+
+

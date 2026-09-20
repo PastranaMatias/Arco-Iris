@@ -1,45 +1,49 @@
-from interfaces.imostrable import IMostrable
 from producto import Producto
+from descuento import Descuento
+from stock import Stock
+from ticket import Ticket
 
-class GestorProductos(IMostrable):
+class GestorProductos:
     def __init__(self):
-        self.lista_productos = []
+        self.ListaProductos=[]
 
-    def agregar_producto(self, p: Producto):
-        self.lista_productos.append(p)
-        print("✅ Producto agregado correctamente.")
+    def agregarProducto(self,p:Producto):
+        self.ListaProductos.append(p)
+        print("se agrego el producto")
 
-    def buscar_producto(self, nombre, marca, color=None):
-        for p in self.lista_productos:
-            if (p.nombre.lower() == nombre.lower() and 
-                p.marca.lower() == marca.lower() and 
-                ((p.color is None and color is None) or (p.color and color and p.color.lower() == color.lower()))):
-                return p
-        return None
+  
+    def aplicarDescuento(self, p: Producto, descuento: Descuento):
+        return descuento.aplicar(p.precio)
 
-    def modificar_stock(self, nombre, marca, color, cantidad):
-        producto = self.buscar_producto(nombre, marca, color)
-        if producto:
-            try:
-                producto.actualizar_stock(cantidad)
-                print(f"Stock actualizado: {producto.nombre} ({producto.marca}, Color: {producto.color}) ahora tiene {producto.stock} unidades.")
-            except ValueError as e:
-                print(e)
-        else:
-            print("❌ Producto no encontrado.")
+    def verificarStock(self,p:Producto)->bool:
+        stock=Stock(p.stock)
+        return stock.verifica()
 
-    def eliminar_producto(self, nombre, marca, color=None):
-        producto = self.buscar_producto(nombre, marca, color)
-        if producto:
-            self.lista_productos.remove(producto)
-            print(f"🗑️ Producto eliminado: {producto.nombre} ({producto.marca}, Color: {producto.color})")
-        else:
-            print("❌ Producto no encontrado para eliminar.")
-
-    def mostrar(self):
-        if not self.lista_productos:
-            print("No hay productos registrados.")
-        else:
-            print("\n=== Lista de productos con precios de venta y stock ===")
-            for p in self.lista_productos:
-                p.mostrar()
+    def mostrarPreciosFinales(self):
+        for produc in self.ListaProductos:
+            print (f"{Producto(produc).nombre}:${Producto(produc).calcular_precio()}")
+        
+    def generarTicket(self,items):
+        ticket=Ticket()
+    
+        for idPro, cantida in items:  #recorro de 2 en 2
+            nuevop=self.buscarProducto(idPro) #busco el producto y guardo
+    
+            if nuevop is None:
+                print ("Nose encontro")  #sino se enconcuentra salta aca
+                      #encontrando    
+            if nuevop and self.verificarStock(nuevop) and nuevop.stock>=cantida:#veo si hay stock o si hay mas de lo q pido
+                print(nuevop.stock>=cantida)
+                ticket.agregarP(nuevop,cantida)    #agrego el produc, y la canti
+                nuevop.actualizar_stock(nuevop.stock-cantida)#actualizo el stock
+                print(nuevop.stock>=cantida)
+        return (ticket)        
+    
+    
+    def buscarProducto(self,id_p):
+        for productos in self.ListaProductos: #recorro los productos
+                
+            if productos.id==id_p: #busco y comparo si son igual los id
+                return productos # si se encuentra lo retorna
+            
+        return None   #sino retorna None
