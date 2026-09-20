@@ -73,15 +73,3 @@ classDiagram
     Ticket --> Producto
     Producto ..|> IMostrable
     GestorProductos ..|> IMostrable
-
-flowchart TD
-    A[Inicio Cobro] --> B[Ingresar productos]
-    B --> C[Generar Ticket]
-    C --> D[Calcular subtotal]
-    D --> E[Seleccionar forma de pago]
-    E --> F{Efectivo o Crédito?}
-    F -->|Efectivo| G[Aplicar descuento]
-    F -->|Crédito| H[Aplicar recargo]
-    G --> I[Mostrar ticket final]
-    H --> I[Mostrar ticket final]
-    I --> J[Fin]
