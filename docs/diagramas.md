@@ -67,28 +67,3 @@ classDiagram
     Pedido --> Producto
     Ticket --> Producto
     Usuario --> IMostrable
-
-
-flowchart TD
-    A[Inicio Cobro] --> B[Ingresar productos]
-    B --> C[Generar Ticket]
-    C --> D[Calcular subtotal]
-    D --> E[Seleccionar forma de pago]
-    E --> F{Efectivo o Crédito?}
-    F -->|Efectivo| G[Aplicar descuento]
-    F -->|Crédito| H[Aplicar recargo]
-    G --> I[Mostrar ticket final]
-    H --> I[Mostrar ticket final]
-    I --> J[Fin]
-
-
-sequenceDiagram
-    actor Usuario
-    Usuario ->> GestorProductos: agregarProducto()
-    GestorProductos ->> Producto: new Producto()
-    GestorProductos ->> Stock: verificarStock()
-    Stock -->> GestorProductos: estadoStock
-    GestorProductos ->> Ticket: generarTicket(items)
-    Ticket ->> Descuento: aplicar(precio)
-    Ticket -->> GestorProductos: totalFinal
-    GestorProductos -->> Usuario: mostrar ticket y precio final
