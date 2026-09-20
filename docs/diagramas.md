@@ -1,5 +1,3 @@
-# Diagramas del Proyecto Arco-Iris
-
 ## Diagrama de Clases
 ```mermaid
 classDiagram
@@ -60,10 +58,16 @@ classDiagram
         + mostrar()
     }
 
+    class IMostrable {
+        <<interface>>
+        + mostrar()
+    }
+
     GestorProductos --> Producto
     GestorProductos --> Ticket
     GestorProductos --> Descuento
     GestorProductos --> Stock
     Pedido --> Producto
     Ticket --> Producto
-    Usuario --> IMostrable
+    Producto ..|> IMostrable
+    GestorProductos ..|> IMostrable
