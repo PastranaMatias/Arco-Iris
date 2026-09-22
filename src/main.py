@@ -26,14 +26,21 @@ def genTi():
 
         item.append((id,cant))
 
-        print("Desea agregar otro producto, precione:")
-        print("1- Si")
-        print("0- No, ir a forma de pago")
-        re=int(input())
+        while True:
+            print("Desea agregar otro producto, precione:")
+            print("1- Si")
+            print("0- No, ir a forma de pago")
+            re=int(input())
 
-        if re==0:
+            if re==0:
+                break
+            elif re==1 : 
+                break
+            else:
+                print("Dato erroneo") 
+
+        if re==0: 
             break
-        elif re!=1 : print("Dato erroneo") #agregar un execion
 
     ticke=gestP.generarTicket(item) #genero ticket
     subtotal=ticke.calTotal()  #guarto el total sin descuento
