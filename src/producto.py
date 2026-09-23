@@ -20,7 +20,9 @@ class Producto:
 
     def actualizar_stock(self, cantidad):
         if cantidad < 0 and abs(cantidad) > self.stock:
-            raise ValueError("No se puede reducir más stock del disponible.")
+            raise ValueError(
+                f"No se puede reducir más stock del disponible.\n"
+                f"Stock disponible: {self.stock}"   )#agrego para mostrar cuanto queda
         self.stock += cantidad
 
     def mostrar_confirmacion(self):
