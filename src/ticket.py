@@ -5,7 +5,7 @@ class Ticket:
         self.items=[]  #(id produ y cantidad)
 
     def agregarP(self,pro,can):
-        print("agregando:",pro.nombre,can)
+        #print("agregando:",pro.nombre,can)
         self.items.append((pro,can))  #agrego el producto y la canti
 
     def calTotal(self):

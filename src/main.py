@@ -11,7 +11,7 @@ def limpiarPantalla():
 
 gestP=GestorProductos() #creo al gestor de productos /para verificar
 produc=Producto(1,"pintura","Grre",120,5,"rojo") #productos de prueba
-prod=Producto(2,"pintura","Blue",120,7,"Azul")
+prod=Producto(2,"fresstal","Blue",120,7,"Azul")
 gestP.agregarProducto(produc)
 gestP.agregarProducto(prod)
 gestP.verificarStock(prod)
@@ -20,11 +20,45 @@ def genTi():
     item =[]
 
     while True:  
+        limpiarPantalla()
         print(" === Cobro ===")
-        id=int(input("ing id del producto: "))
-        cant=int(input("ing cantidad: "))
 
-        item.append((id,cant))
+        while True:
+            try:
+                id=int(input("ing id del producto: "))
+                producto=gestP.buscarProducto(id)
+
+                if producto is None:
+                   print("No existe un producto con ese ID")
+                   continue
+                break
+
+            except ValueError:
+              print ("Debe ingresar un ID Valido")
+
+        if gestP.verificarStock(producto):
+            while True:
+                try:
+                    cant=int(input("ing cantidad: "))
+
+                    if cant<=0: 
+                        print("La cantidad debe ser mayor a 0")
+                        continue
+                    try:
+                        producto.actualizar_stock(-cant)
+                        break #stock actualizado exitosamente
+                    except ValueError as e:
+                        print(e)
+                    
+                except ValueError:
+                    print("Debe ingresar un numero")
+
+            item.append((id,cant)) 
+            print(f"agregado: {producto.nombre} x{cant}")
+            
+        else:
+            print("Necesita renovar el stock")                          
+            print("El producto no fue agregado")
 
         while True:
             print("Desea agregar otro producto, precione:")
@@ -42,27 +76,34 @@ def genTi():
         if re==0: 
             break
 
+    limpiarPantalla()
     ticke=gestP.generarTicket(item) #genero ticket
     subtotal=ticke.calTotal()  #guarto el total sin descuento
 
-    print("Formas de Pago:")   
-    print("1- Efectivo")
-    print ("2- Tarjeta")
-    forma=int(input())
-
-    if forma==1:
-        desc=Descuento("Efectivo",10) 
-
-    elif forma==2:
-        desc=Descuento("Credito",15)
-    
-    else:desc=None
+    while True:
+        try:
+            print("Formas de Pago:")   
+            print("1- Efectivo")
+            print ("2- Tarjeta")
+            forma=int(input())
+            
+            if forma==1:
+                desc=Descuento("Efectivo",10) 
+                break
+            elif forma==2:
+                desc=Descuento("Credito",15)
+                break
+            else: #desc=None
+                print("Opcion invalida")
+        except ValueError:
+            print("Elija una de esas opciones")
 
     if desc:
         totalFinal=desc.aplicar(subtotal)
 
     else: totalFinal=subtotal
-
+    
+    limpiarPantalla()
     ticke.impriTiket()
     print(f"Precio: ${subtotal}")
     if desc.tipo=="efectivo":
