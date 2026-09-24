@@ -61,17 +61,21 @@ def genTi():
             print("El producto no fue agregado")
 
         while True:
-            print("Desea agregar otro producto, precione:")
-            print("1- Si")
-            print("0- No, ir a forma de pago")
-            re=int(input())
+            try:
+                print("Desea agregar otro producto, precione:")
+                print("1- Si")
+                print("0- No, ir a forma de pago")
+                re=int(input())
 
-            if re==0:
-                break
-            elif re==1 : 
-                break
-            else:
-                print("Dato erroneo") 
+                if re==0:
+                    break
+                elif re==1 : 
+                    break
+                else:
+                    print("Dato erroneo") 
+
+            except ValueError():
+                print ("Opcion Invalida")
 
         if re==0: 
             break
