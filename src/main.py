@@ -151,7 +151,7 @@ def pedir_stock():
             print("Debe ingresar un número entero válido.")
 
 def menu():
-    productos = []
+    #productos = []
     while True:
         limpiarPantalla() # limpio lo q estaba arriba de la terminal
         print("\n=== Sistema Arcoiris ===")
@@ -163,7 +163,7 @@ def menu():
         opcion = input("Seleccione una opción: ")
         
         if opcion == "1":
-            id=int(input("ingrese ID"))
+            id=int(input("ingrese ID: "))
             nombre = input("Ingrese nombre: ").strip()
             marca = input("Ingrese marca: ").strip()
             precio = pedir_precio()
@@ -176,18 +176,21 @@ def menu():
 
             try:
                 nuevo = Producto(id,nombre, marca, precio, stock, color)
-                productos.append(nuevo)
+                #productos.append(nuevo)
+                gestP.agregarProducto(nuevo)
                 nuevo.mostrar_confirmacion()
             except ValueError as e:
                 print(e)
 
         elif opcion == "2":
-            if productos:
+            if gestP.ListaProductos:
                 print("\n=== Lista de productos ===")
-                for p in productos:
+                for p in gestP.ListaProductos:
                     p.mostrar_confirmacion()
             else:
                 print("No hay productos registrados todavía.")
+
+            input("Enter para volver al menu")
 
         elif opcion=="3":
             genTi()
