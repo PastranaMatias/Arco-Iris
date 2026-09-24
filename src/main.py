@@ -74,7 +74,7 @@ def genTi():
                 else:
                     print("Dato erroneo") 
 
-            except ValueError():
+            except ValueError:
                 print ("Opcion Invalida")
 
         if re==0: 
