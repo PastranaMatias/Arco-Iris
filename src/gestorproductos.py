@@ -32,11 +32,13 @@ class GestorProductos:
             if nuevop is None:
                 print ("Nose encontro")  #sino se enconcuentra salta aca
                       #encontrando    
-            if nuevop and self.verificarStock(nuevop) and nuevop.stock>=cantida:#veo si hay stock o si hay mas de lo q pido
-                print(nuevop.stock>=cantida)
+
+            #if nuevop and self.verificarStock(nuevop) and nuevop.stock>=cantida:#veo si hay stock o si hay mas de lo q pido
+            else:
+                #print(nuevop.stock>=cantida)
                 ticket.agregarP(nuevop,cantida)    #agrego el produc, y la canti
-                nuevop.actualizar_stock(nuevop.stock-cantida)#actualizo el stock
-                print(nuevop.stock>=cantida)
+                #nuevop.actualizar_stock(nuevop.stock-cantida)#actualizo el stock
+                #print(nuevop.stock>=cantida)
         return (ticket)        
     
     

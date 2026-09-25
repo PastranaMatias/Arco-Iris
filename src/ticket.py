@@ -2,19 +2,30 @@ from datetime import date
 
 class Ticket:    
     def __init__(self):
-        self.items=[]  #(id produ y cantidad)
+        # lista de tuplas (producto, cantidad)
+        self.items = []
 
-    def agregarP(self,pro,can):
-        print("agregando:",pro.nombre,can)
-        self.items.append((pro,can))  #agrego el producto y la canti
+    def agregarP(self, producto, cantidad):
+        # agrega el producto y la cantidad al ticket
+        self.items.append((producto, cantidad))
 
     def calTotal(self):
-        total=0
-        for produc, cant in self.items:
-            total+=produc.precio*cant    #(mult por la cantidad)
+        total = 0
+        for producto, cantidad in self.items:
+            # si el producto tiene calcular_precio(), lo usamos
+            if hasattr(producto, "calcular_precio"):
+                total += producto.calcular_precio() * cantidad
+            else:
+                total += producto.precio * cantidad
         return total
 
     def impriTiket(self):
-        print("== Tiket ==")
-        for li,ca in self.items:
-            print(f"{li.nombre} x{ca} ${li.precio*ca}")
+        print("\n=== Ticket de Venta ===")
+        for producto, cantidad in self.items:
+            if hasattr(producto, "calcular_precio"):
+                precio_unitario = producto.calcular_precio()
+            else:
+                precio_unitario = producto.precio
+            print(f"ID: {producto.id} | {producto.nombre} x{cantidad} - ${precio_unitario * cantidad}")
+        print(f"TOTAL: ${self.calTotal()}")
+
