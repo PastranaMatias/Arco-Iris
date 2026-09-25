@@ -1,7 +1,7 @@
-from producto import Producto
-from descuento import Descuento
-from stock import Stock
-from ticket import Ticket
+from src.producto import Producto
+from src.descuento import Descuento
+from src.stock import Stock
+from src.ticket import Ticket
 
 class GestorProductos:
     def __init__(self):
