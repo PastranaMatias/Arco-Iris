@@ -1,51 +1,52 @@
-from producto import Producto
-from descuento import Descuento
-from stock import Stock
-from ticket import Ticket
+from src.producto import Producto
+from src.descuento import Descuento
+from src.stock import Stock
+from src.ticket import Ticket
 
 class GestorProductos:
     def __init__(self):
-        self.ListaProductos=[]
+        self.ListaProductos = []
 
-    def agregarProducto(self,p:Producto):
+    def agregarProducto(self, p: Producto):
         self.ListaProductos.append(p)
-        print("se agrego el producto")
+        print("Se agregó el producto")
 
-  
     def aplicarDescuento(self, p: Producto, descuento: Descuento):
         return descuento.aplicar(p.precio)
 
-    def verificarStock(self,p:Producto)->bool:
-        stock=Stock(p.stock)
+    def verificarStock(self, p: Producto) -> bool:
+        stock = Stock(p.stock)
         return stock.verifica()
 
     def mostrarPreciosFinales(self):
         for produc in self.ListaProductos:
-            print (f"{Producto(produc).nombre}:${Producto(produc).calcular_precio()}")
-        
-    def generarTicket(self,items):
-        ticket=Ticket()
-    
-        for idPro, cantida in items:  #recorro de 2 en 2
-            nuevop=self.buscarProducto(idPro) #busco el producto y guardo
-    
-            if nuevop is None:
-                print ("Nose encontro")  #sino se enconcuentra salta aca
-                      #encontrando    
+            print(f"{produc.nombre}: ${produc.calcular_precio()}")
 
-            #if nuevop and self.verificarStock(nuevop) and nuevop.stock>=cantida:#veo si hay stock o si hay mas de lo q pido
+    def mostrarListaPrecios(self, descuento_efectivo: float, recargo_credito: float):
+        """Tarjeta 4: lista de precios según medio de pago"""
+        for producto in self.ListaProductos:
+            precio_base = producto.calcular_precio()
+            precio_efectivo = Descuento("efectivo", descuento_efectivo).aplicar(precio_base)
+            precio_credito = Descuento("credito", recargo_credito).aplicar(precio_base)
+
+            print(
+                f"{producto.nombre} | Base: ${precio_base} | "
+                f"Efectivo (-{descuento_efectivo}%): ${precio_efectivo} | "
+                f"Crédito (+{recargo_credito}%): ${precio_credito}"
+            )
+
+    def generarTicket(self, items):
+        ticket = Ticket()
+        for idPro, cantidad in items:  # recorro de 2 en 2
+            nuevop = self.buscarProducto(idPro)  # busco el producto y guardo
+            if nuevop is None:
+                print("No se encontró")
             else:
-                #print(nuevop.stock>=cantida)
-                ticket.agregarP(nuevop,cantida)    #agrego el produc, y la canti
-                #nuevop.actualizar_stock(nuevop.stock-cantida)#actualizo el stock
-                #print(nuevop.stock>=cantida)
-        return (ticket)        
-    
-    
-    def buscarProducto(self,id_p):
-        for productos in self.ListaProductos: #recorro los productos
-                
-            if productos.id==id_p: #busco y comparo si son igual los id
-                return productos # si se encuentra lo retorna
-            
-        return None   #sino retorna None
+                ticket.agregarP(nuevop, cantidad)
+        return ticket
+
+    def buscarProducto(self, id_p):
+        for productos in self.ListaProductos:  # recorro los productos
+            if productos.id == id_p:  # comparo si son igual los id
+                return productos  # si se encuentra lo retorna
+        return None   # sino retorna None
