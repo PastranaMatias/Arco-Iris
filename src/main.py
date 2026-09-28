@@ -1,8 +1,8 @@
-from producto import Producto
-from gestorproductos import GestorProductos
-from interfaces.imostrable import IMostrable
-from descuento import Descuento
-from ticket import Ticket
+from src.producto import Producto
+from src.gestorproductos import GestorProductos
+from src.interfaces.imostrable import IMostrable
+from src.descuento import Descuento
+from src.ticket import Ticket
 import os  # para limpiar pantalla
 
 
@@ -104,7 +104,7 @@ def genTi():
 
         while True:
             try:
-                print("Desea agregar otro producto, precione:")
+                print("Desea agregar otro producto, presione:")
                 print("1- Si")
                 print("0- No, ir a forma de pago")
                 re = int(input())
