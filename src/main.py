@@ -1,6 +1,5 @@
 from src.producto import Producto
 from src.gestorproductos import GestorProductos
-from src.interfaces.imostrable import IMostrable
 from src.descuento import Descuento
 from src.ticket import Ticket
 import os  # para limpiar pantalla
@@ -60,6 +59,7 @@ def genTi():
         limpiarPantalla()
         print(" === Cobro ===")
 
+        # pedir ID del producto
         while True:
             try:
                 entrada = input("ing id del producto: ").strip()
@@ -74,15 +74,14 @@ def genTi():
                     print("No existe un producto con ese ID")
                     continue
                 break
-
             except ValueError:
                 print("Debe ingresar un ID válido")
 
+        # pedir cantidad
         if gestP.verificarStock(producto):
             while True:
                 try:
                     cant = int(input("ing cantidad: "))
-
                     if cant <= 0:
                         print("La cantidad debe ser mayor a 0")
                         continue
@@ -91,48 +90,44 @@ def genTi():
                         break
                     except ValueError as e:
                         print(e)
-
                 except ValueError:
                     print("Debe ingresar un número")
 
             item.append((id, cant))
             print(f"agregado: {producto.nombre} x{cant}")
-
         else:
             print("Necesita renovar el stock")
             print("El producto no fue agregado")
 
+        # preguntar si quiere agregar otro
         while True:
             try:
-                print("Desea agregar otro producto, presione:")
-                print("1- Si")
+                print("Desea agregar otro producto?")
+                print("1- Sí")
                 print("0- No, ir a forma de pago")
                 re = int(input())
-
-                if re == 0:
-                    break
-                elif re == 1:
+                if re in (0, 1):
                     break
                 else:
                     print("Dato erróneo")
-
             except ValueError:
                 print("Opción inválida")
 
         if re == 0:
-            break
+            break  # salir del bucle principal y pasar al pago
 
+    # generar ticket y calcular subtotal
     limpiarPantalla()
     ticke = gestP.generarTicket(item)
     subtotal = ticke.calTotal()
 
+    # elegir forma de pago
     while True:
         try:
             print("Formas de Pago:")
             print("1- Efectivo")
             print("2- Tarjeta")
             forma = int(input())
-
             if forma == 1:
                 desc = Descuento("Efectivo", 10)
                 break
@@ -144,10 +139,7 @@ def genTi():
         except ValueError:
             print("Elija una de esas opciones")
 
-    if desc:
-        totalFinal = desc.aplicar(subtotal)
-    else:
-        totalFinal = subtotal
+    totalFinal = desc.aplicar(subtotal)
 
     limpiarPantalla()
     ticke.impriTiket()
@@ -167,32 +159,19 @@ def menu():
         limpiarPantalla()
         print("\n=== Sistema Arcoiris ===")
         print("1. Registrar producto")
-        print("2. Mostrar productos")
+        print("2. Mostrar productos y precios según método de pago")
         print("3. Cobrar Productos")
         print("4. Salir")
 
         opcion = input("Seleccione una opción: ")
 
         if opcion == "1":
-            while True:
-                entrada = input("Ingrese ID: ").strip()
-                if not entrada:
-                    print(" El ID no puede estar vacío.")
-                    continue
-                try:
-                    id = int(entrada)
-                    break
-                except ValueError:
-                    print(" Debe ingresar un número válido.")
-
+            id = int(input("Ingrese ID: "))
             nombre = input("Ingrese nombre: ").strip()
             marca = input("Ingrese marca: ").strip()
             precio = pedir_precio()
             stock = pedir_stock()
-
-            color = input("Ingrese color (dejar vacío si no aplica): ").strip()
-            if not color:
-                color = None
+            color = input("Ingrese color (dejar vacío si no aplica): ").strip() or None
 
             try:
                 nuevo = Producto(id, nombre, marca, precio, stock, color)
@@ -205,10 +184,18 @@ def menu():
 
         elif opcion == "2":
             if gestP.ListaProductos:
-                print("\n=== Lista de productos ===")
+                print("\n=== Lista de productos y precios según método de pago ===")
                 for p in gestP.ListaProductos:
-                    print(f"ID: {p.id} | ", end="")  #  ahora se muestra el ID
-                    p.mostrar_confirmacion()
+                    precio_base = p.calcular_precio()
+                    precio_efectivo = Descuento("efectivo", 10).aplicar(precio_base)
+                    precio_credito = Descuento("credito", 15).aplicar(precio_base)
+
+                    print(
+                        f"ID: {p.id} | {p.nombre} | Color: {p.color} | Stock: {p.stock} | "
+                        f"Base: ${precio_base} | "
+                        f"Efectivo (-10%): ${precio_efectivo} | "
+                        f"Crédito (+15%): ${precio_credito}"
+                    )
             else:
                 print("No hay productos registrados todavía.")
 
@@ -225,6 +212,5 @@ def menu():
 
 
 if __name__ == "__main__":
-    inicializar_productos()  #  se cargan los dos productos de prueba
+    inicializar_productos()  # se cargan los dos productos de prueba
     menu()
-
