@@ -54,7 +54,7 @@ def pedir_stock():
 
 def genTi():
     item = []
-
+    listaSinStock=[]
     while True:
         limpiarPantalla()
         print(" === Cobro ===")
@@ -86,8 +86,12 @@ def genTi():
                         print("La cantidad debe ser mayor a 0")
                         continue
                     try:
-                        producto.actualizar_stock(-cant)
+                        producto.actualizar_stock(-cant) #actualizo estock
+
+                        if gestP.verificarStock(producto):#si no hay stock se agrega 
+                            listaSinStock.append(producto)#a una lista para realizar el pedido
                         break
+
                     except ValueError as e:
                         print(e)
                 except ValueError:
@@ -152,15 +156,24 @@ def genTi():
 
     print("Enter para volver al menú")
     input()
+    return listaSinStock #retorno lo lista de productos sin stock
 
 
 def menu():
+    listaPedidos=[]
+
     while True:
         limpiarPantalla()
+
+        if listaPedidos: #si la lista tiene pedidos, gerera la alerta
+            print("ALERTA: TIENE PRODUCTOS SIN STOCK")
+        
         print("\n=== Sistema Arcoiris ===")
         print("1. Registrar producto")
         print("2. Mostrar productos y precios según método de pago")
         print("3. Cobrar Productos")
+        print("4. Mostrar Disponiblidad de Productos")
+        print("5. Realizar pedido de Productos")
         print("4. Salir")
 
         opcion = input("Seleccione una opción: ")
@@ -202,7 +215,7 @@ def menu():
             input("Enter para volver al menú")
 
         elif opcion == "3":
-            genTi()
+            listaPedidos.append(genTi())
 
         elif opcion == "4":
             print("Saliendo del sistema...")

@@ -33,4 +33,3 @@ class Producto:
     def calcular_precio(self)->int:
         return self.precio * 1.3  # Calcula el precio de venta agregando el 30% de ganancia sobre el costo.
 
-
