@@ -218,6 +218,31 @@ def menu():
             listaPedidos.append(genTi())
 
         elif opcion == "4":
+            print("Disponibilidad de Productos ")
+            for p in gestP.ListaProductos:
+                if p.stock >0 and p.stock <= 5 :
+                    print(
+                    f"ID: {p.id} | Nombre:{p.nombre} | Stock: {p.stock} | "
+                    f"Estado: Poco Stock | "
+                    f"Recomendacon: Agregar + Stock"
+                        )
+                
+                elif p.stock>5 :
+                    print(
+                    f"ID: {p.id} | Nombre:{p.nombre} | Stock: {p.stock} | "
+                    f"Estado: Estable "
+                        )
+
+                else:
+                    print(
+                    f"ID: {p.id} | Nombre:{p.nombre} | Stock: {p.stock} | "
+                    f"Estado: Sin Stock | "
+                    f"Recomendacon: Agregar Stock Urgente"
+                        )    
+            input("Enter para volver al menu ")
+            
+        
+        elif opcion == "5":
             print("Saliendo del sistema...")
             break
         else:
