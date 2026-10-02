@@ -2,14 +2,21 @@ from src.producto import Producto
 from src.descuento import Descuento
 from src.stock import Stock
 from src.ticket import Ticket
+from src.pedido import Pedido
 
 class GestorProductos:
     def __init__(self):
         self.ListaProductos = []
+        self.ListaPedidos=[] # aca se guardan productos sin stock
+        self.contadorPedido=0
 
     def agregarProducto(self, p: Producto):
         self.ListaProductos.append(p)
         print("Se agregó el producto")
+
+    def agregarPedido(self, p: Producto):
+            self.ListaPedidos.append(p)
+            print("Se agregó a la lista de pedidos")
 
     def aplicarDescuento(self, p: Producto, descuento: Descuento):
         return descuento.aplicar(p.precio)
@@ -50,3 +57,19 @@ class GestorProductos:
             if productos.id == id_p:  # comparo si son igual los id
                 return productos  # si se encuentra lo retorna
         return None   # sino retorna None
+
+    def realizarPedido(self, listaP):
+        self.contadorPedido+=1  #incremento el contador de pedido
+        pedido=Pedido(self.contadorPedido)
+        pedido.generarPedido(listaP)
+
+        for Pro, cantidad in listaP:  # recorro de 2 en 2
+
+            Pro.actualizar_stock(cantidad) #actualizo el stock
+
+            for objetoP in self.ListaPedidos:         # si se le agrega
+                if objetoP.id==Pro.id:                # stock al producto
+                   self.ListaPedidos.remove(objetoP)  # se elimina de la lista
+                   
+        pedido.mostrarPedido() 
+        
