@@ -2,6 +2,7 @@ from src.producto import Producto
 from src.gestorproductos import GestorProductos
 from src.descuento import Descuento
 from src.ticket import Ticket
+from src.pedido import Pedido
 import os  # para limpiar pantalla
 
 
@@ -54,7 +55,7 @@ def pedir_stock():
 
 def genTi():
     item = []
-    listaSinStock=[]
+    
     while True:
         limpiarPantalla()
         print(" === Cobro ===")
@@ -88,8 +89,10 @@ def genTi():
                     try:
                         producto.actualizar_stock(-cant) #actualizo estock
 
-                        if gestP.verificarStock(producto):#si no hay stock se agrega 
-                            listaSinStock.append(producto)#a una lista para realizar el pedido
+                       
+                        if gestP.verificarStock(producto)==False:#si no hay stock se agrega 
+                            gestP.agregarPedido(producto)        #a la lista de pedidos
+                            
                         break
 
                     except ValueError as e:
@@ -156,16 +159,17 @@ def genTi():
 
     print("Enter para volver al menú")
     input()
-    return listaSinStock #retorno lo lista de productos sin stock
+    
 
 
 def menu():
-    listaPedidos=[]
+    #listaPedidos=[]
+    #contador=0
 
     while True:
         limpiarPantalla()
 
-        if listaPedidos: #si la lista tiene pedidos, gerera la alerta
+        if gestP.ListaPedidos: #si la lista tiene pedidos, gerera la alerta
             print("ALERTA: TIENE PRODUCTOS SIN STOCK")
         
         print("\n=== Sistema Arcoiris ===")
@@ -174,7 +178,7 @@ def menu():
         print("3. Cobrar Productos")
         print("4. Mostrar Disponiblidad de Productos")
         print("5. Realizar pedido de Productos")
-        print("4. Salir")
+        print("0. Salir")
 
         opcion = input("Seleccione una opción: ")
 
@@ -215,16 +219,17 @@ def menu():
             input("Enter para volver al menú")
 
         elif opcion == "3":
-            listaPedidos.append(genTi())
+            genTi()
 
         elif opcion == "4":
-            print("Disponibilidad de Productos ")
+            limpiarPantalla()
+            print("=== Disponibilidad de Productos ===")
             for p in gestP.ListaProductos:
                 if p.stock >0 and p.stock <= 5 :
                     print(
                     f"ID: {p.id} | Nombre:{p.nombre} | Stock: {p.stock} | "
                     f"Estado: Poco Stock | "
-                    f"Recomendacon: Agregar + Stock"
+                    f"Recomendación: Agregar + Stock"
                         )
                 
                 elif p.stock>5 :
@@ -237,12 +242,78 @@ def menu():
                     print(
                     f"ID: {p.id} | Nombre:{p.nombre} | Stock: {p.stock} | "
                     f"Estado: Sin Stock | "
-                    f"Recomendacon: Agregar Stock Urgente"
+                    f"Recomendación: Agregar Stock Urgente"
                         )    
             input("Enter para volver al menu ")
             
         
         elif opcion == "5":
+            listNueva=[]
+            
+            limpiarPantalla()
+            if gestP.ListaPedidos:
+                print("PRODUCTOS SIN STOCK")
+                for p in gestP.ListaPedidos:
+                    print(f"ID: {p.id} | Nombre:{p.nombre}")
+
+            print("=== Pedidos ===")
+            while True:
+                while True:    
+                    try:
+                        entrada = input("ing id del producto: ").strip()
+                        if not entrada:
+                            print(" El ID no puede estar vacío.")
+                            continue
+        
+                        id = int(entrada)
+                        producto = gestP.buscarProducto(id)
+        
+                        if producto is None:
+                            print("No existe un producto con ese ID")
+                            continue
+                        break
+                    except ValueError:
+                        print("Debe ingresar un ID válido")
+                while True:
+                    try:
+                        cant = int(input("ing cantidad a reponer: "))
+                        if cant <= 0:
+                            print("La cantidad debe ser mayor a 0")
+                            continue
+                        
+                        break
+
+                    except ValueError:
+                        print("Debe ingresar un número")
+
+                listNueva.append((producto,cant)) 
+
+                # pregunta si quiere agregar otro producto al pedido
+                while True:
+                    try:
+                        print("¿Desea agregar otro producto al pedido?")
+                        print("1- Sí")
+                        print("0- No")
+                        re = int(input())
+                        if re in (0, 1):
+                            break
+                        else:
+                            print("Dato erróneo")
+                    except ValueError:
+                        print("Opción inválida")
+        
+                if re == 0:
+                    break 
+
+            limpiarPantalla()
+            #realizamos el pedido de tal producto
+            gestP.realizarPedido(listNueva)
+            
+            input("Enter para ir al menu")
+
+
+            
+        elif opcion == "0":
             print("Saliendo del sistema...")
             break
         else:
