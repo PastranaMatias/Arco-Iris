@@ -8,6 +8,6 @@ class Stock:
 
         if self.cantidadDisponible <= 0:
             self.alerta = False
-            print("No hay Stock= 0")
+            #print("No hay Stock= 0")
         
         return self.alerta
