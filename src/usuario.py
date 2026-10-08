@@ -1,4 +1,5 @@
-from imostrable import IMostrable
+from interfaces.imostrable import IMostrable
+
 class Usuario(IMostrable):
     def __init__(self,nombre:str,dni:str,id:str):
         self.nombre=nombre
